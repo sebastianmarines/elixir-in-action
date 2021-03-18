@@ -13,7 +13,7 @@ defmodule MyFile do
 
   def line_lengths!(path) do
     path
-    |> Stream.map(&String.replace(&1, "\n", ""))
+    |> filtered_lines
     |> Enum.map(&String.length/1)
   end
 
@@ -28,5 +28,17 @@ defmodule MyFile do
     path
     |> filtered_lines
     |> Enum.max_by(&String.length/1)
+  end
+
+  def words_per_line!(path) do
+    path
+    |> filtered_lines
+    |> Enum.map(&word_count/1)
+  end
+
+  defp word_count(string) do
+    string
+    |> String.split
+    |> length
   end
 end
