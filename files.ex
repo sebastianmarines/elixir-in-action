@@ -23,4 +23,10 @@ defmodule MyFile do
     |> Stream.map(&String.length/1)
     |> Enum.max
   end
+
+  def longest_line!(path) do
+    path
+    |> filtered_lines
+    |> Enum.max_by(&String.length/1)
+  end
 end
