@@ -8,7 +8,7 @@ defmodule ListLen do
 	end
 	
 	defp calculate_len(list, len) do
-		[head | tail] = list
+		[_ | tail] = list
 		calculate_len(tail, len + 1)
 	end
 end
