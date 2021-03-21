@@ -5,7 +5,7 @@ defmodule TodoList do
     Enum.reduce(
       entries,
       %TodoList{},
-      fn(entry, todo_list_acc) ->
+      fn (entry, todo_list_acc) ->
         add_entry(todo_list_acc, entry)
       end
     )
@@ -67,7 +67,36 @@ defmodule TodoList do
 end
 
 defmodule TodoList.CsvImporter do
-  def import(file) do
-    IO.puts("Not implemented")
+  def import(path) do
+    path
+    |> read_file
+    |> Stream.map(&parse_line(&1))
+    |> Stream.map(&create_entry(&1))
+    |> TodoList.new
+  end
+
+  defp read_file(path) do
+    path
+    |> File.stream!
+    |> Stream.map(&String.replace(&1, "\n", ""))
+  end
+
+  defp parse_line(line) do
+    [date, title] = String.split(line, ",")
+    [year, month, day] = parse_date(date)
+    {{year, month, day}, title}
+  end
+
+  defp parse_date(string_date) do
+    string_date
+    |> String.split("/")
+    |> Enum.map(
+         &String.to_integer(&1)
+       )
+  end
+
+  defp create_entry({{year, month, day}, title}) do
+    date = Date.new!(year, month, day)
+    %{date: date, title: title}
   end
 end
